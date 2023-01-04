@@ -36,8 +36,12 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: gridItems) {
                     ForEach(tracks) { track in
-                        Text(track.trackName)
-                            .frame(width: 150, height: 150)
+                        AsyncImage(url: track.artworkURL) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 150, height: 150)
                     }
                 }
             }

@@ -12,12 +12,12 @@
   - scroll bar visibility: second arg
 # Abstracting Complex Views
 
-# Store Property-Value Across Program Executions
+# Store Property-Value Across Program Executions<!-- {"fold":true} -->
 - `@AppStorage` property wrapper
   - `@AppStorage(“var1”) var var1 = “”`
 
 
-# Conforming to `Identifiable` Protocol
+# Conforming to `Identifiable` Protocol<!-- {"fold":true} -->
 - Purpose: tell SwiftUI how to uniquely identify a structure.
 - How:
   1. Conform to `Identifiable`
