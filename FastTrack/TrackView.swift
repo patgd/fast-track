@@ -10,6 +10,7 @@ import SwiftUI
 struct TrackView: View {
     let track: Track
     let onSelected: (Track) -> Void
+    @State private var isHovering = false
     
     var body: some View {
         Button {
@@ -30,6 +31,8 @@ struct TrackView: View {
                     }
                 }
                 .frame(width: 150, height: 150)
+                .scaleEffect(isHovering ? 1.2 : 1.0)
+                .border(.primary, width: isHovering ? 3 : 0)
                 
                 VStack {
                     Text(track.trackName)
@@ -46,6 +49,11 @@ struct TrackView: View {
             }
         }
         .buttonStyle(.borderless)
+        .onHover { hovering in
+            withAnimation {
+                isHovering = hovering
+            }
+        }
     }
 }
 
