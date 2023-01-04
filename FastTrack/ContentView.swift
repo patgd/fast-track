@@ -9,14 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     let gridItems: [GridItem] = [
-        GridItem(.fixed(100)),
-        GridItem(.fixed(100)),
-        GridItem(.fixed(100))
+        GridItem(.adaptive(minimum: 150, maximum: 200)),
     ]
+    @AppStorage("searchText") var searchText = ""
+    
     var body: some View {
-        LazyVGrid(columns: gridItems) {
-            ForEach(1..<100) { i in
-                Color.red
+        VStack {
+            HStack {
+                TextField("Search for a song", text: $searchText)
+                Button("Search") {
+                    // TBD
+                }
+            }
+            ScrollView {
+                LazyVGrid(columns: gridItems) {
+                    ForEach(1..<100) { i in
+                        Color.red
+                            .frame(width: 150, height: 150)
+                    }
+                }
             }
         }
     }
