@@ -6,7 +6,7 @@
   - columns are passed to vertical grids
 - `LazyHGrid`
   - rows are passed to horizontal grids
-# Scrolling a View<!-- {"fold":true} -->
+# Scrolling a View
 - `ScrollView`
   - control direction: first arg
   - scroll bar visibility: second arg

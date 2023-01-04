@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct ContentView: View {
     let gridItems: [GridItem] = [
@@ -13,6 +14,7 @@ struct ContentView: View {
     ]
     @AppStorage("searchText") var searchText = ""
     @State private var tracks = [Track]()
+    @State private var audioPlayer: AVPlayer?
     
     func performSearch() async throws {
         guard let url = URL(string: "https://itunes.apple.com/search?term=\(searchText)&limit=100&entity=song") else { return }
@@ -25,6 +27,11 @@ struct ContentView: View {
             try await performSearch()
         }
     }
+    func play(_ track: Track) {
+        audioPlayer?.pause()
+        audioPlayer = AVPlayer(url: track.previewUrl)
+        audioPlayer?.play()
+    }
     
     var body: some View {
         VStack {
@@ -36,31 +43,7 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: gridItems) {
                     ForEach(tracks) { track in
-                        ZStack(alignment: .bottom) {
-                            AsyncImage(url: track.artworkURL) { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image.resizable()
-                                case .failure(_):
-                                    Image(systemName: "questionmark")
-                                        .symbolVariant(.circle)
-                                        .font(.largeTitle)
-                                default:
-                                    ProgressView()
-                                }
-                            }
-                            .frame(width: 150, height: 150)
-                            
-                            VStack {
-                                Text(track.trackName)
-                                    .font(.headline)
-                                Text(track.artistName)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .padding(5)
-                            .frame(width: 150)
-                            .background(.regularMaterial)
-                        }
+                        TrackView(track: track, onSelected: play)
                     }
                 }
             }
