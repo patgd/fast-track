@@ -33,8 +33,11 @@ struct TrackView: View {
                 
                 VStack {
                     Text(track.trackName)
+                        .lineLimit(2)
                         .font(.headline)
+                    
                     Text(track.artistName)
+                        .lineLimit(2)
                         .foregroundStyle(.secondary)
                 }
                 .padding(5)

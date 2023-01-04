@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var audioPlayer: AVPlayer?
     
     func performSearch() async throws {
+        guard let searchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         guard let url = URL(string: "https://itunes.apple.com/search?term=\(searchText)&limit=100&entity=song") else { return }
         let (data, _) = try await URLSession.shared.data(from: url)
         let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
@@ -40,12 +41,15 @@ struct ContentView: View {
                     .onSubmit(startSearch)
                 Button("Search", action: startSearch)
             }
+            .padding([.top, .horizontal])
+            
             ScrollView {
                 LazyVGrid(columns: gridItems) {
                     ForEach(tracks) { track in
                         TrackView(track: track, onSelected: play)
                     }
                 }
+                .padding()
             }
         }
     }
