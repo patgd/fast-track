@@ -12,19 +12,31 @@ struct ContentView: View {
         GridItem(.adaptive(minimum: 150, maximum: 200)),
     ]
     @AppStorage("searchText") var searchText = ""
+    @State private var tracks = [Track]()
+    
+    func performSearch() async throws {
+        guard let url = URL(string: "https://itunes.apple.com/search?term=\(searchText)&limit=100&entity=song") else { return }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
+        tracks = searchResult.results
+    }
+    func startSearch() {
+        Task {
+            try await performSearch()
+        }
+    }
     
     var body: some View {
         VStack {
             HStack {
                 TextField("Search for a song", text: $searchText)
-                Button("Search") {
-                    // TBD
-                }
+                    .onSubmit(startSearch)
+                Button("Search", action: startSearch)
             }
             ScrollView {
                 LazyVGrid(columns: gridItems) {
-                    ForEach(1..<100) { i in
-                        Color.red
+                    ForEach(tracks) { track in
+                        Text(track.trackName)
                             .frame(width: 150, height: 150)
                     }
                 }
